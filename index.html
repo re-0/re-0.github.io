@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en-us">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <title></title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+  </head>
+
+  <body id="start">
+
+    <nav class="navbar navbar-expand-md navbar-dark bg-custom fixed-top">
+      <a class="navbar-brand" href="#start">re-0&#64;GitHub</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="#start">Start</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#about">About Me</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#projects">My Projects</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#more">More About Me</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <header class="py-5 bg-image-full">
+      <!--<img class="img-fluid d-block mx-auto" src="http://placehold.it/200x200&text=Put%20Logo%20Here" alt="">-->
+    </header>
+
+    <main role="main" id="about">
+      <section class="py-5 container">
+      <div class="starter-template">
+        <h1>re-0&#64;GitHub | Virtual CV</h1>
+        <p class="lead">
+          Hey there! I'm a <strong>2<sup>nd</sup> Year Economics Student</strong> at <strong>The University of Manchester</strong>.<br>
+          Right now I'm learning <strong>R</strong> for use in <strong>Data Science and Finance</strong>, as well as <strong>C++</strong> for future code optimization, <strong>Big Data</strong>, <abbr title="High Frequency Trading">HFT</abbr>, etc.<br>
+          Take a look around and I hope you like it!
+        </p>
+      </div>
+      </section>
+
+      <section class="py-5 bg-image-full cat" style="height: 18rem"></section>
+
+      <section class="py-5 container" id="projects">
+        <h1>My Projects</h1>
+        <p class="lead">Just click on one of the tabs to find out more!</p>
+        <ul class="nav nav-tabs">
+          <li class="nav-item">
+            <a href="#currentProjects" data-toggle ="tab" role="tab" class="nav-link active">Current Project</a>
+          </li>
+          <li class="nav-item">
+            <a href="#cppExcercises" data-toggle ="tab" role="tab" class="nav-link">C++ Exercises</a>
+          </li>
+        </ul>
+
+        <div class="tab-content">
+          <div class="tab-pane active" role="tabpanel" id="currentProjects">
+              <p class="lead">Aim: <strong>Visualize stock market data</strong>, <strong>compute Betas</strong> and <strong>optimal portfolio weight</strong>.<br>
+                Finally, present portfolio weighing with different charts. <em><small> Certain things have been left out! Check full source code and description <a href="#">here</a>.</small></em>
+              </p>
+              <p class="h3">Step 1: Loading required packages and csv files</p>
+<pre><code>  <span class="cmt"><em># Packages used</em></span>
+  require(tidyr)
+  require(dplyr)
+  require(ggplot2)
+  require(gridExplore)
+      <span class="cmt"><em># Data</em></span>
+      goog  &lt;- read.csv("C:/Users/User/Desktop/findata/goog.csv")
+      msft  &lt;- read.csv("C:/Users/User/Desktop/findata/msft.csv")
+      ibm   &lt;- read.csv("C:/Users/User/Desktop/findata/ibm.csv")
+      intc  &lt;- read.csv("C:/Users/User/Desktop/findata/intc.csv")
+      sp500 &lt;- read.csv("C:/Users/User/Desktop/findata/sp500.csv")
+      tbill &lt;- read.csv("C:/Users/User/Desktop/findata/tnx.csv")
+</code></pre>
+
+<p class="h3">Step 2: Adding the periodic return rate to each data frame</p>
+<pre><div class="container"><div class="row"><div class="col"><code><span class="cmt"><em># r(t) = (p<sub>t</sub> - p<sub>t-1</sub>) * p<sub>t-1</sub><sup>-1</sup></em></span>
+ret.goog  &lt;- c(0, diff(goog$Close)/goog[-nrow(goog),    "Close"])
+ret.msft  &lt;- c(0, diff(msft$Close)/msft[-nrow(msft),    "Close"])
+ret.ibm   &lt;- c(0, diff(ibm$Close)/ibm[-nrow(ibm),       "Close"])
+&Tab;<span class="cmt">....</span>
+<span class="cmt"><em># Add new column "Return" to Data Frames</em></span>
+goog  &lt;- (goog %&gt;%  mutate(Return = ret.goog))[-1,]
+msft  &lt;- (msft %&gt;%  mutate(Return = ret.msft))[-1,]
+ibm   &lt;- (ibm %&gt;%   mutate(Return = ret.ibm))[-1,]
+&Tab;<span class="cmt">....</span></code></div><div class="w-100"></div>
+<samp><div class="col" style="background-color: #282828"><span class="cmt"># Console output</span>
+&gt; head(goog, 2)
+    Date   Open   High     Low  Close Adj.Close  Volume       Return
+2 2017-03-17 851.61 853.40 847.110 852.12    852.12 1712300  0.003935020
+3 2017-03-20 850.01 850.22 845.150 848.40    848.40 1231500 -0.004365548</div></samp></div></div></pre>
+
+<p class="h3">Step 3: Transforming data to xts and plotting graph</p>
+<pre><code><span class="cmt"><em># Making sure R recognizes the Date column</em></span>
+goog$Date   &lt;- as.Date(goog$Date)
+msft$Date   &lt;- as.Date(msft$Date)
+&Tab;<span class="cmt">....</span>
+<span class="cmt"><em>Creating time series' and plotting them with ggplot2</em></span>
+xts.goog &lt;- as.xts(goog[,-1], order.by = goog$Date)
+ line.goog &lt;- ggplot(xts.goog, aes(x = Index, y = goog$Close)) + geom_line() +
+      labs(title = "GOOG Price", subtitle = "Mar 17, 2017-18",
+          x = "Time", y = "Share Price in US$", caption = "Data Source: Yahoo! Finance") + theme_bw()
+&Tab;<span class="cmt">....</span>
+grid.arrange(line.goog, line.msft, line.ibm, line.intc, nrow = 2)
+</code></pre>
+<a href="plot.jpg" target="_blank" class="h4"><em>View graph (new tab)</em></a>
+
+<p class="h3">Step 4: Computing Betas</p>
+<pre><code><span class="cmt"><em># Excess Returns</em></span>
+xRet_goog.rf &lt;- goog$Return - tbill$Return
+xRet_msft.rf &lt;- msft$Return - tbill$Return
+&Tab;<span class="cmt">....</span>
+<span class="cmt"><em># Regression for Beta</em></span>
+beta.goog &lt;- summary(lm(xRet_goog.rf ~ xRet_sp500.rf))$coefficients[2,1] <span class="cmt"><em># Prints 1.157589</em></span>
+&Tab;<span class="cmt">....</span>
+</code></pre>
+
+<p class="h3">Step 5: Visualizing Portfolio Weight</p>
+<pre><code><span class="cmt"><em># Computing Portfolio Weight</em></span>
+avg.close &lt;- c(mean(goog$Close), mean(msft$Close), mean(ibm$Close), mean(intc$Close))
+weight &lt;- avg.close / sum(avg.close)
+<span class="cmt"><em># 0.78316541 0.06192101 0.12304474 0.03186883</em></span>
+<span class="cmt"><em># Creating a Data Frame and Bar Plot</em></span>
+portfolio &lt;- data.frame(Ticker = c("GOOG", "MSFT", "IBM", "INTC"), Weight = weight*100)
+
+ggplot(portfolio,
+                aes(x = Ticker, y = Weight, fill = Ticker)) +
+                geom_col() + theme_bw() +
+&Tab;<span class="cmt">....</span>
+</code></pre>
+<a href="plot2.jpg" target="_blank" class="h4"><em>View graph (new tab)</em></a>
+          </div>
+          <div class="tab-pane" role="tabpanel" id="cppExcercises">
+              <a href="https://github.com/re-0/Factorial-in-C-" target="_blank">Factorials</a><br>
+              <a href="https://github.com/re-0/mean-and-variance-c-" target="_blank">Mean and Variance</a><br>
+              <a href="https://github.com/re-0/Financial-Statistics-in-C-using-Vectors" target="_blank">Statistics with Vectors</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="py-5 bg-image-full paper" style="height: 18rem"></section>
+
+
+      <section class="py-5 container" id="more">
+        <h1>More About Me</h1>
+        <p class="lead">If you came this far, I assume you realized I'm into Finance.
+          Besides the academic stuff, I love doing Martial Arts, playing with cats and having fun with friends.</p>
+      </section>
+    </main>
+<footer class="py-5 bg-dark">
+  <div class="container">
+    <p class="m-0 text-center text-white">re-0.github.io<br>Created during a cold night in Manchester, UK.</p>
+  </div>
+</footer>
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.13.0/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/js/bootstrap.min.js"></script>
+  </body>
+</html>
