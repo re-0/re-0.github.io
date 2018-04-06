@@ -111,7 +111,7 @@
               coord_x_date(ylim = c(0, 1)) +
               scale_fill_grey()
 </code></pre>
-<a href="https://raw.githubusercontent.com/re-0/re-0.github.io/master/annret.jpg" target="_blank" class="h4"><em>View graph (new tab)</em></a>
+<a href="annret.jpg" target="_blank" class="h4"><em>View graph (new tab)</em></a>
             <p class="h3">Step 3: Getting the five best performing stocks</p>
 <pre><code> stocks.top5 &lt;- (tech.annual.returns %&gt;%
              filter(date &gt;= (today() - years(1)) & date &lt;= today()) %&gt;%
