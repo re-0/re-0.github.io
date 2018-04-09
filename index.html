@@ -146,27 +146,6 @@
 </code></pre>
 <a href="top5.jpg" target="_blank" class="h4"><em>View graph (new tab)</em></a>
             <p class="h3">Step 4: Finding &beta;</p>
-<pre><code> temp &lt;- tech.stocks
- tmp.aapl &lt;- temp %&gt;% filter(symbol == "AAPL" & date &gt;= (today() - years(1)) & date &lt;= today())
- <span class="cmt"><em>...</em></span>
- ret.aapl &lt;- unlist(diff(tmp.aapl$adjusted)/tmp.aapl[-nrow(tmp.aapl),   "adjusted"], use.names = FALSE)
- <span class="cmt"><em>...</em></span>
- <span class="cmt"><em># Get S&P 500 returns</em></span>
- sp500 &lt;- tq_get("^GSPC", from = (today() - years(1)))
- ret.sp500 &lt;- unlist(diff(sp500$adjusted)/sp500[-nrow(sp500),   "adjusted"], use.names = FALSE)
-
- <span class="cmt"><em># Get T-Bill (10yrs) returns</em></span>
- tnx &lt;- tq_get("^TNX", from = (today() - years(1)))
- ret.tnx &lt;- unlist(diff(tnx$adjusted)/tnx[-nrow(tnx),   "adjusted"], use.names = FALSE)
-
- xRet_AAPL   &lt;- ret.aapl  - ret.tnx
- <span class="cmt"><em>...</em></span>
-
- beta.AAPL &lt;- summary(lm(xRet_AAPL   ~ xRet_SP.TNX))$coefficients[2,1]
- <span class="cmt"><em>...</em></span>
-</code></pre>
-
-            <p class="h3">Extra: A potentially quicker way to get &beta; | Unfinished</p>
 <pre><code> stock_returns.daily &lt;- tech.stocks %&gt;%
                            tq_transmute(select     = adjusted,
                                         mutate_fun = periodReturn,
@@ -175,26 +154,41 @@
                                         col_rename = "returns") %>%
                                   spread(key = symbol, value = returns)
 
- sp500.2 &lt;- tq_get("^GSPC", from = (today() - years(5)))
- ret.sp500.2 &lt;- sp500.2 %&gt;% tq_transmute(select     = adjusted,
-                                              mutate_fun  = periodReturn,
-                                              period      = "daily",
-                                              type        = "arithmetic")
+ sp500 &lt;- tq_get("^GSPC", from = (today() - years(5)))
+ ret.sp500 &lt;- sp500 %&gt;% tq_transmute(select     = adjusted,
+                                           mutate_fun  = periodReturn,
+                                           period      = "daily",
+                                           type        = "arithmetic")
 
- tnx.2 &lt;- tq_get("^TNX", from = (today() - years(5)))
- ret.tnx.2 &lt;- tnx.2 %&gt;% tq_transmute(select     = adjusted,
-                                           mutate_fun = periodReturn,
-                                           period     = "daily",
-                                           type       = "arithmetic")
- <span class="cmt"><em>## There was data missing. hence:
- ## sp &lt;- ret.sp500.2[,-2]
- ## tx &lt;- ret.tnx.2[,-2]
+ tnx &lt;- tq_get("^TNX", from = (today() - years(5)))
+ ret.tnx &lt;- tnx %&gt;% tq_transmute(select     = adjusted,
+                                       mutate_fun = periodReturn,
+                                       period     = "daily",
+                                       type       = "arithmetic")
+ <span class="cmt"><em>## There was data missing. Hence:
+ ## sp &lt;- ret.sp500[,-2]
+ ## tx &lt;- ret.tnx[,-2]
  ## anti_join(sp, tx) # returns "2016-11-11"</em></span>
- ret.tnx.2 &lt;- add_row(ret.tnx.2, date = "2016-11-11", daily.returns = 0)
- ret.tnx.2 &lt;- ret.tnx.2 %>% arrange(date)
+ ret.tnx &lt;- add_row(ret.tnx, date = "2016-11-11", daily.returns = 0)
+ ret.tnx &lt;- ret.tnx %>% arrange(date)
 
  stock_returns.daily &lt;- add_column(stock_returns.daily,
- SP500 = ret.sp500.2$daily.returns, TNX = ret.tnx.2$daily.returns)
+ SP500 = ret.sp500$daily.returns, TNX = ret.tnx$daily.returns)
+
+ excess.Returns <- ((stock_returns.daily.2[, 1:ncol(stock_returns.daily.2)-1]) - stock_returns.daily.2$TNX)[,-1]
+
+ # Returns a Vector with every beta
+ # Note: Will throw a warning message for SP500 ~ SP500 (obviously)
+ beta <- (sapply(colnames(excess.Returns),
+                function(x){
+                  summary(
+                    lm(
+                      excess.Returns[,x] ~ excess.Returns[, ncol(excess.Returns)])
+                      )$coefficients[2,1]
+                  }))
+
+# Remove SP500 ~ SP500
+beta <- beta[-length(beta)]
 </code></pre>
           </div>
           <div class="tab-pane" role="tabpanel" id="pastRProject">
