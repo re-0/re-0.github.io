@@ -72,7 +72,7 @@
         <div class="tab-content">
           <div class="tab-pane active" role="tabpanel" id="currentProject">
             <p class="lead">Aim: Use <strong>Tidyquant</strong> to analyze stock market data of 15 companies, as well as find the <strong>Markowitz Mean-Variance Portfolio Weight</strong>.<br>
-              <em><small>The project will be finished soon. Full source code and description <a href="https://github.com/re-0/Stock-Analysis-in-R-Pt-2">here</a>.</small> | Updated: April 5, 2018</em>
+              <em><small>The project will be finished soon. Full source code and description <a href="https://github.com/re-0/Stock-Analysis-in-R-Pt-2">here</a>.</small> | Updated: April <del>5</del> 9, 2018</em>
             </p>
             <p class="h3">Step 1: Loading required packages and data</p>
 <pre><code> library(tidyquant)
@@ -187,8 +187,8 @@
                       )$coefficients[2,1]
                   }))
 
-# Remove SP500 ~ SP500
-beta <- beta[-length(beta)]
+ # Remove SP500 ~ SP500
+ beta <- beta[-length(beta)]
 </code></pre>
           </div>
           <div class="tab-pane" role="tabpanel" id="pastRProject">
