@@ -1,0 +1,52 @@
+@import url('https://fonts.googleapis.com/css?family=Goudy+Bookletter+1911');
+
+@font-face {
+  font-family: 'paymentfont';
+  src: url('./fonts/paymentfont-webfont.ttf');
+  src: url('./fonts/paymentfont-webfont.eot'),
+  url('./fonts/paymentfont-webfont.woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+.active{
+    background-color: rgba(255,255,255,.1);
+}
+
+nav a {
+    color: black !important;
+}
+
+.navbar {
+    background-color: transparent;
+}
+
+.top-nav-collapse {
+    background-color: #DDACAC;
+}
+
+/*.top-nav-collapse a{
+  color: #9C5353 !important;
+}*/
+
+.goudy {
+    font-family: 'Goudy Bookletter 1911', serif;
+}
+
+section.cat {
+    background-image: url("https://images.unsplash.com/photo-1484244233201-29892afe6a2c?ixlib=rb-0.3.5&s=e9dc83fa3877bd84ade596b0828deb87&auto=format&fit=crop&w=1950&q=80");
+    background-repeat: no-repeat;
+    background-position: 0% 20%;
+    background-attachment: fixed;
+    background-size: cover;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover; 
+}
+  
+
+@media only screen and (max-width: 768px) {
+    .navbar {
+        background-color: #DDACAC;
+    }
+}
