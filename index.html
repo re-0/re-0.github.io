@@ -159,9 +159,8 @@
   <section class="text-center py-5" id="portfolio" style="min-height: 100vh">
   <h1>My Work</h1>
     <p class="text-muted">This is a quick overwiev of my current C# project, an Inventory Management System. See the full code <a href="https://github.com/re-0/CL-Inventory-Management-System" target="_blank">here</a>.</p>
-    <div class="container">
       <p class="h3">Custom data structure</p>
-    <pre class="mx-auto" style="width: 70vw"><code class="language-csharp">public class Product
+    <pre class="mx-auto" style="width: 60vw"><code class="language-csharp">public class Product
 {
   public string productName {get; set;}
   public string brand {get; set;}
@@ -170,7 +169,7 @@
 }</code></pre>
 
       <p class="h3">Saving data in database</p>
-    <pre class="mx-auto" style="width: 70vw"><code class="language-csharp">public static void AddProduct(List<Product> someList)
+    <pre class="mx-auto" style="width: 60vw"><code class="language-csharp">public static void AddProduct(List<Product> someList)
 {
   using( var con = new SqliteConnection("DataSource = InventoryDB.db"))
   {
@@ -192,7 +191,7 @@
 }</code></pre>
 
 <p class="h3">Value of added inventory</p>
-<pre class="mx-auto" style="width: 70vw"><code class="language-csharp">public static void AddedInventoryValue(List someList)
+<pre class="mx-auto" style="width: 60vw"><code class="language-csharp">public static void AddedInventoryValue(List someList)
 {
   var totalItems = someList.Sum(item => item.productQuantity);
   decimal sum = 0m;
@@ -202,12 +201,11 @@
 
     Console.WriteLine($"Value of added inventory: {(char)163}{sum} (with {totalItems} items.)");
 }</code></pre>
-    </div>
     </section>
   
   </section>
 
-  <section class="text-left py-5 cat" id="contact" style="height: 65vh">
+  <section class="text-left py-5 cat" id="contact" style="height: 65vh; widht: 60vw;">
     <div style="background: white; opacity: 0.5;">
       <h1 style="margin-left: 30px">Contact</h1>
       <p style="margin-left: 30px"><strong>The best way to get in touch is by messaging me on <a href="https://www.linkedin.com/in/regi-okonkwo/" target="_blank">LinkedIn</a>.</strong></p>
