@@ -1,13 +1,13 @@
 @import url('https://fonts.googleapis.com/css?family=Goudy+Bookletter+1911');
 
-@font-face {
+/*@font-face {
   font-family: 'paymentfont';
   src: url('./fonts/paymentfont-webfont.ttf');
   src: url('./fonts/paymentfont-webfont.eot'),
   url('./fonts/paymentfont-webfont.woff');
   font-weight: normal;
   font-style: normal;
-}
+}*/
 
 .active{
     background-color: rgba(255,255,255,.1);
